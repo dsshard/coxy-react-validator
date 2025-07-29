@@ -1,4 +1,4 @@
-import { ValidatorRule } from './types'
+import type { ValidatorRule } from './types'
 
 // eslint-disable-next-line
 const emailReg =
@@ -45,14 +45,14 @@ export const rules = {
 
   min: (min) => [
     {
-      rule: (value) => parseFloat(value) > min,
+      rule: (value) => Number.parseFloat(value) > min,
       message: `The value must be greater than ${min}`,
     },
   ],
 
   max: (max) => [
     {
-      rule: (value) => parseFloat(value) < max,
+      rule: (value) => Number.parseFloat(value) < max,
       message: `The value must be smaller ${max}`,
     },
   ],

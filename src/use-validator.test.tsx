@@ -2,22 +2,20 @@
  * @jest-environment jsdom
  */
 
-import { unmountComponentAtNode } from 'react-dom'
 import { render, screen } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
+import { act } from '@testing-library/react'
 import { useEffect, useState } from 'react'
 
 import { rules } from './rules'
 import { useValidator } from './use-validator'
 
-let container
+let container: HTMLDivElement | null
 beforeEach(() => {
   container = document.createElement('div')
   document.body.appendChild(container)
 })
 
 afterEach(() => {
-  unmountComponentAtNode(container)
   container.remove()
   container = null
 })
@@ -39,8 +37,8 @@ it('check state change and hide field', () => {
 
     return (
       <>
-        <span data-testid='test1'>{isValid ? 'true' : 'false'}</span>
-        <span data-testid='test2'>{validateObject.message || 'true'}</span>
+        <span data-testid="test1">{isValid ? 'true' : 'false'}</span>
+        <span data-testid="test2">{validateObject.message || 'true'}</span>
       </>
     )
   }

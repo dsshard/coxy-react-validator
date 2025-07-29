@@ -3,13 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": ".",
-    "baseUrl": "./",
+    "baseUrl": "./"
   },
-  "include": [
-    "example.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["example.tsx"],
+  "exclude": ["node_modules", "dist"]
 }

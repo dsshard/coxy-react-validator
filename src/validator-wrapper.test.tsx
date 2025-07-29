@@ -2,16 +2,12 @@
  * @jest-environment jsdom
  */
 
-import { createRef } from 'react'
 import { render } from '@testing-library/react'
+import { createRef } from 'react'
 
-import { ValidatorWrapper } from './validator-wrapper'
-import { ValidatorField } from './validator-field'
 import { rules } from './rules'
-
-it('render without child', () => {
-  expect(() => shallow(<ValidatorWrapper />)).toThrowError()
-})
+import { ValidatorField } from './validator-field'
+import { ValidatorWrapper } from './validator-wrapper'
 
 it('check wrapper validator', () => {
   const validator = createRef<ValidatorWrapper>()
@@ -34,8 +30,8 @@ it('check getField validator', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} id='test' />
-      <ValidatorField rules={[]} id='test-fields' />
+      <ValidatorField rules={[]} id="test" />
+      <ValidatorField rules={[]} id="test-fields" />
     </ValidatorWrapper>,
   )
   expect(typeof validator.current.getField).toBe('function')
@@ -52,7 +48,7 @@ it('check getField undefined field', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} id='test-empty-field' />
+      <ValidatorField rules={[]} id="test-empty-field" />
     </ValidatorWrapper>,
   )
 
@@ -64,9 +60,9 @@ it('check stopAtFirstError validator', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator} stopAtFirstError>
-      <ValidatorField rules={[]} value='test' />
-      <ValidatorField rules={rules.email} value='test' />
-      <ValidatorField rules={rules.password} value='' />
+      <ValidatorField rules={[]} value="test" />
+      <ValidatorField rules={rules.email} value="test" />
+      <ValidatorField rules={rules.password} value="" />
     </ValidatorWrapper>,
   )
   const fieldValidate = validator.current.validate()
@@ -79,7 +75,7 @@ it('check unregisterField, registerField', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} id='test-register-field' />
+      <ValidatorField rules={[]} id="test-register-field" />
     </ValidatorWrapper>,
   )
 
@@ -92,8 +88,8 @@ it('check filed in field', () => {
   render(
     <ValidatorWrapper ref={validator}>
       <ValidatorField rules={[]}>
-        <ValidatorField rules={[]} id='check-validate-field-1' />
-        <ValidatorField rules={[]} id='check-validate-field-2' />
+        <ValidatorField rules={[]} id="check-validate-field-1" />
+        <ValidatorField rules={[]} id="check-validate-field-2" />
       </ValidatorField>
     </ValidatorWrapper>,
   )
@@ -109,9 +105,9 @@ it('check wrapper in wrapper', () => {
   const validatorIn = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validatorOut}>
-      <ValidatorField rules={rules.email} value='' />
+      <ValidatorField rules={rules.email} value="" />
       <ValidatorWrapper ref={validatorIn}>
-        <ValidatorField rules={rules.password} value='successpasswword' />
+        <ValidatorField rules={rules.password} value="successpasswword" />
       </ValidatorWrapper>
     </ValidatorWrapper>,
   )
@@ -125,10 +121,10 @@ it('check two validators', () => {
   render(
     <>
       <ValidatorWrapper ref={validatorSuccess}>
-        <ValidatorField rules={rules.password} value='successpasswword' />
+        <ValidatorField rules={rules.password} value="successpasswword" />
       </ValidatorWrapper>
       <ValidatorWrapper ref={validatorFailed}>
-        <ValidatorField rules={rules.email} value='' />
+        <ValidatorField rules={rules.email} value="" />
       </ValidatorWrapper>
     </>,
   )

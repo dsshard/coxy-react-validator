@@ -1,10 +1,11 @@
-import { Component, ReactNode } from 'react'
-import { Validity } from 'types'
+import { Component, type ReactNode } from 'react'
+import type { Validity } from 'types'
 
 import { Context } from './context'
+import type { ValidatorRules } from './rules'
 import { Field } from './validator'
-import { ValidatorRules } from './rules'
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Value = any
 
 type Fn = (validity: Validity, value: Value) => ReactNode
@@ -15,8 +16,8 @@ interface Props {
   value?: Value
   id?: string | number
   children?: ReactNode | Fn
-  unregisterField: (val: any) => void
-  registerField: (val: any) => void
+  unregisterField: (val: Value) => void
+  registerField: (val: Value) => void
   customErrors: Array<Validity>
 }
 

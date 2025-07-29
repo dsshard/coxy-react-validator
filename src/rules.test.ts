@@ -3,7 +3,7 @@ import { rules } from './rules'
 it('check rule email', () => {
   expect(rules.email.length).toBe(2)
 
-  let result
+  let result: boolean
   // email.length > 0
   result = rules.email[0].rule('test')
   expect(result).toBe(true)
@@ -20,7 +20,7 @@ it('check rule email', () => {
 it('check rule password', () => {
   expect(rules.password.length).toBe(2)
 
-  let result
+  let result: boolean
   // password.length > 0
   result = rules.password[0].rule('test')
   expect(result).toBe(true)
@@ -40,7 +40,7 @@ it('check rule bool', () => {
 it('check rule notEmpty', () => {
   expect(rules.notEmpty.length).toBe(1)
 
-  let result
+  let result: boolean
   result = rules.notEmpty[0].rule('')
   expect(result).toBe(false)
 
@@ -52,7 +52,7 @@ it('check rule min', () => {
   expect(rules.min(1).length).toBe(1)
   expect(typeof rules.min).toBe('function')
 
-  let result
+  let result: boolean
   result = rules.min(10)[0].rule('')
   expect(result).toBe(false)
 
@@ -76,7 +76,7 @@ it('check rule min', () => {
 })
 
 it('check rule max', () => {
-  let result
+  let result: boolean
   result = rules.max(10)[0].rule('')
   expect(result).toBe(false)
 
@@ -100,7 +100,7 @@ it('check rule max', () => {
 })
 
 it('check rule length', () => {
-  let result
+  let result: boolean
   result = rules.length(1)[0].rule('')
   expect(result).toBe(false)
 

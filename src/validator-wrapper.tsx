@@ -1,13 +1,13 @@
-import { Component, ReactNode, RefObject } from 'react'
+import { Component, type ReactNode, type RefObject } from 'react'
 
-import { Validity } from './types'
 import { Context } from './context'
-import { Field, Validator } from './validator'
+import type { Validity } from './types'
+import { type Field, Validator } from './validator'
 
 interface ComponentProps {
   children?: ReactNode
   stopAtFirstError?: boolean
-  ref?: RefObject<any>
+  ref?: RefObject<ValidatorWrapper>
 }
 
 export class ValidatorWrapper extends Component<ComponentProps> {
@@ -16,8 +16,8 @@ export class ValidatorWrapper extends Component<ComponentProps> {
     customErrors: [],
   }
 
-  constructor(props, ctx) {
-    super(props, ctx)
+  constructor(props) {
+    super(props)
     this.registerField = this.registerField.bind(this)
     this.unregisterField = this.unregisterField.bind(this)
   }
@@ -53,13 +53,13 @@ export class ValidatorWrapper extends Component<ComponentProps> {
 
   validate(): Validity {
     const validator = new Validator({ stopAtFirstError: this.props.stopAtFirstError })
-    this.fields.forEach((comp) => {
+    for (const comp of this.fields) {
       validator.addField(comp.props)
-    })
+    }
     return validator.validate()
   }
 
-  render() {
+  render(): ReactNode {
     return (
       <Context.Provider
         value={{

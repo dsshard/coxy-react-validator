@@ -1,7 +1,7 @@
+import type { ValidatorRules } from './rules'
+import type { Validity } from './types'
 import { Validator } from './validator'
-import { ValidatorRules } from './rules'
-import { Value } from './validator-field'
-import { Validity } from './types'
+import type { Value } from './validator-field'
 
 export function useValidator(value: Value, rules: ValidatorRules): [boolean, Pick<Validity, 'message' | 'errors'>] {
   const validator = new Validator()

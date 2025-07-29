@@ -1,6 +1,6 @@
-import { Value } from './validator-field'
-import { ValidatorRules } from './rules'
-import { FieldParams, Validity } from './types'
+import type { ValidatorRules } from './rules'
+import type { FieldParams, Validity } from './types'
+import type { Value } from './validator-field'
 
 export class Field {
   private rules: ValidatorRules
@@ -20,12 +20,12 @@ export class Field {
     let message = ''
     const { rules, value, required, id } = this
 
-    const isEmptyValue = !value && parseFloat(value) !== 0
+    const isEmptyValue = !value && Number.parseFloat(value) !== 0
 
     if (!rules.length || (isEmptyValue && required === false)) {
       return { isValid, message, id }
     }
-    rules.forEach((instance) => {
+    for (const instance of rules) {
       if (isValid) {
         isValid = instance.rule(value)
         if (!isValid) {
@@ -36,7 +36,7 @@ export class Field {
           }
         }
       }
-    })
+    }
     return { isValid, message, id }
   }
 }
@@ -70,7 +70,7 @@ export class Validator {
   }
 
   validate(): Validity {
-    let prevResult
+    let prevResult: Validity | null
     const statuses = this.fields.map((field) => {
       if (this.params?.stopAtFirstError && prevResult && prevResult.isValid === false) {
         return null

@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import { Validity } from './types'
+import type { Validity } from './types'
 
 export const Context = createContext<{
   registerField: (field: string | number) => void

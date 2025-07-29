@@ -2,21 +2,17 @@
  * @jest-environment jsdom
  */
 
+import { act, render } from '@testing-library/react'
 import { createRef, useEffect, useState } from 'react'
-import { render, act } from '@testing-library/react'
 
-import { ValidatorWrapper } from './validator-wrapper'
-import { ValidatorField } from './validator-field'
 import { rules } from './rules'
-
-it('render without wrapper', () => {
-  expect(() => shallow(<ValidatorField />)).toThrowError()
-})
+import { ValidatorField } from './validator-field'
+import { ValidatorWrapper } from './validator-wrapper'
 
 it('normal render', () => {
   render(
     <ValidatorWrapper>
-      <ValidatorField rules={[]} value='' />
+      <ValidatorField rules={[]} value="" />
     </ValidatorWrapper>,
   )
 })
@@ -42,10 +38,10 @@ it('check failed validation', () => {
   render(
     <>
       <ValidatorWrapper ref={validator1}>
-        <ValidatorField rules={rules.email} value='test' />
+        <ValidatorField rules={rules.email} value="test" />
       </ValidatorWrapper>
       <ValidatorWrapper ref={validator2}>
-        <ValidatorField rules={rules.email} value='' />
+        <ValidatorField rules={rules.email} value="" />
       </ValidatorWrapper>
     </>,
   )
@@ -83,8 +79,8 @@ it('check state change and hide field', () => {
 
     return (
       <ValidatorWrapper ref={validator1}>
-        <ValidatorField rules={rules.email} value='test' />
-        {st && <ValidatorField rules={rules.email} value='' />}
+        <ValidatorField rules={rules.email} value="test" />
+        {st && <ValidatorField rules={rules.email} value="" />}
       </ValidatorWrapper>
     )
   }
@@ -104,7 +100,7 @@ it('check success validation', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={rules.email} value='email@email.com' />
+      <ValidatorField rules={rules.email} value="email@email.com" />
     </ValidatorWrapper>,
   )
 
@@ -118,7 +114,7 @@ it('check success validation fot child function', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={rules.email} value='email@email.com'>
+      <ValidatorField rules={rules.email} value="email@email.com">
         {({ isValid, message }) => <>{!isValid && <div>{message}</div>}</>}
       </ValidatorField>
     </ValidatorWrapper>,
@@ -140,7 +136,7 @@ it('check custom rule message function', () => {
   ]
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={rule} value='test'>
+      <ValidatorField rules={rule} value="test">
         {({ isValid, message }) => <>{!isValid && <div>{message}</div>}</>}
       </ValidatorField>
     </ValidatorWrapper>,

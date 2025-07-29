@@ -1,5 +1,6 @@
-import { ValidatorRules } from './rules'
-import { Value } from './validator-field'
+import type { ValidatorRules } from './rules'
+import type { Value } from './validator-field'
+
 type Fn = (value: Value) => string
 
 export interface ValidatorRule {

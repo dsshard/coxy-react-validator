@@ -1,14 +1,14 @@
 /* eslint no-console: [0] */
-import { useState, createRef } from 'react'
+import { createRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { ValidatorWrapper, rules, ValidatorField, Validator } from '../dist/index'
+import { Validator, ValidatorField, ValidatorWrapper, rules } from '../dist/index'
 
-function App () {
+function App() {
   const [email, setEmail] = useState('')
   const jsxValidator = createRef<ValidatorWrapper>()
 
-  function handleValidateEmail () {
+  function handleValidateEmail() {
     const { isValid, message, errors } = jsxValidator.current.validate()
     if (!isValid) {
       console.log(isValid, message, errors)
@@ -17,12 +17,12 @@ function App () {
     console.log('success')
   }
 
-  function handleValidateCustomFields () {
+  function handleValidateCustomFields() {
     const validator = new Validator({ stopAtFirstError: true })
     const fieldPassword = validator.addField({
       rules: rules.password,
       value: '',
-      id: 'for-remove'
+      id: 'for-remove',
     })
 
     const fieldSearchPassword = validator.getField('for-remove')
@@ -32,7 +32,7 @@ function App () {
 
     validator.addField({
       rules: rules.password,
-      value: 'testpassword'
+      value: 'testpassword',
     })
 
     const { isValid, message, errors } = validator.validate()
@@ -52,11 +52,15 @@ function App () {
               <input onChange={({ target: { value } }) => setEmail(value)} />
               <div>{isValid ? 'valid' : 'invalid'}</div>
               <div>{message || ''}</div>
-              <button onClick={handleValidateEmail} type="button">Validate email</button>
+              <button onClick={handleValidateEmail} type="button">
+                Validate email
+              </button>
             </>
           )}
         </ValidatorField>
-        <button onClick={handleValidateCustomFields} type="button">Validate custom fields</button>
+        <button onClick={handleValidateCustomFields} type="button">
+          Validate custom fields
+        </button>
       </ValidatorWrapper>
     </>
   )
