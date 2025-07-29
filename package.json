@@ -1,6 +1,6 @@
 {
   "name": "@coxy/react-validator",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "🚀 Simple validation form for React or NodeJS apps. useValidator are included ;)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -11,7 +11,14 @@
   },
   "bugs": "https://github.com/dsshard/react-validator/issues",
   "private": false,
-  "keywords": ["react", "react validator", "react component", "form validation", "validation", "validator"],
+  "keywords": [
+    "react",
+    "react validator",
+    "react component",
+    "form validation",
+    "validation",
+    "validator"
+  ],
   "author": "dsshard",
   "scripts": {
     "start": "tsup ./src/index.ts --watch",
