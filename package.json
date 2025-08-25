@@ -1,6 +1,6 @@
 {
   "name": "@coxy/react-validator",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "🚀 Simple validation form for React or NodeJS apps. useValidator are included ;)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -33,7 +33,6 @@
   "peerDependencies": {
     "react": ">=18.x.x"
   },
-
   "dependencies": {},
   "devDependencies": {
     "react": ">=18.x.x",
