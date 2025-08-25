@@ -1,6 +1,6 @@
 {
   "files": {
-    "includes": ["src/**/*"]
+    "includes": ["src/**/*", "example/example.tsx"]
   },
   "formatter": {
     "enabled": true,

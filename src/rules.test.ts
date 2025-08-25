@@ -33,6 +33,7 @@ it('check rule password', () => {
 it('check rule bool', () => {
   expect(rules.bool.length).toBe(1)
 
+  // @ts-expect-error
   const result = rules.bool[0].rule(true)
   expect(result).toBe(true)
 })
@@ -62,12 +63,14 @@ it('check rule min', () => {
   result = rules.min(9)[0].rule('11')
   expect(result).toBe(true)
 
+  // @ts-expect-error
   result = rules.min(9)[0].rule(10)
   expect(result).toBe(true)
 
   result = rules.min(9)[0].rule('8')
   expect(result).toBe(false)
 
+  // @ts-expect-error
   result = rules.min(9)[0].rule(7)
   expect(result).toBe(false)
 
@@ -86,12 +89,14 @@ it('check rule max', () => {
   result = rules.max(9)[0].rule('11')
   expect(result).toBe(false)
 
+  // @ts-expect-error
   result = rules.max(9)[0].rule(10)
   expect(result).toBe(false)
 
   result = rules.max(9)[0].rule('5')
   expect(result).toBe(true)
 
+  // @ts-expect-error
   result = rules.max(9)[0].rule(5)
   expect(result).toBe(true)
 

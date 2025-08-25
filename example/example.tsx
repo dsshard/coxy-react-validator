@@ -1,8 +1,6 @@
-/* eslint no-console: [0] */
-import { createRef, useState } from 'react'
-import { createRoot } from 'react-dom/client'
-
-import { Validator, ValidatorField, ValidatorWrapper, rules } from '../dist/index'
+import React, { createRef, useState } from 'react'
+import ReactDOM from 'react-dom/client'
+import { rules, Validator, ValidatorField, ValidatorWrapper } from '../dist/index'
 
 function App() {
   const [email, setEmail] = useState('')
@@ -44,28 +42,26 @@ function App() {
   }
 
   return (
-    <>
-      <ValidatorWrapper ref={jsxValidator}>
-        <ValidatorField rules={rules.email} value={email}>
-          {({ isValid, message }) => (
-            <>
-              <input onChange={({ target: { value } }) => setEmail(value)} />
-              <div>{isValid ? 'valid' : 'invalid'}</div>
-              <div>{message || ''}</div>
-              <button onClick={handleValidateEmail} type="button">
-                Validate email
-              </button>
-            </>
-          )}
-        </ValidatorField>
-        <button onClick={handleValidateCustomFields} type="button">
-          Validate custom fields
-        </button>
-      </ValidatorWrapper>
-    </>
+    <ValidatorWrapper ref={jsxValidator}>
+      <ValidatorField rules={rules.email} value={email}>
+        {({ isValid, message }) => (
+          <>
+            <input onChange={({ target: { value } }) => setEmail(value)} />
+            <div>{isValid ? 'valid' : 'invalid'}</div>
+            <div>{message || ''}</div>
+            <button onClick={handleValidateEmail} type="button">
+              Validate email
+            </button>
+          </>
+        )}
+      </ValidatorField>
+      <button onClick={handleValidateCustomFields} type="button">
+        Validate custom fields
+      </button>
+    </ValidatorWrapper>
   )
 }
 
-const root = createRoot(document.getElementById('root'))
+const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(<App />)
