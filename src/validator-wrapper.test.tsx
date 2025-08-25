@@ -132,3 +132,21 @@ it('check two validators', () => {
   expect(validatorFailed.current.validate().isValid).toBe(false)
   expect(validatorSuccess.current.validate().isValid).toBe(true)
 })
+
+it('covers registerField duplicate and unregisterField non-existing branches', () => {
+  const validator = createRef<ValidatorWrapper>()
+  render(
+    <ValidatorWrapper ref={validator}>
+      <ValidatorField rules={[]} id="dup-field" value="" />
+    </ValidatorWrapper>,
+  )
+
+  const handle = validator.current.getField('dup-field')
+  validator.current.registerField(handle)
+  validator.current.unregisterField(handle)
+  const dummy = {
+    props: { value: '', rules: [], id: 'dummy' },
+    validate: () => ({ isValid: true, message: '' }),
+  }
+  validator.current.unregisterField(dummy)
+})

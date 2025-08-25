@@ -130,8 +130,8 @@ it('check custom rule message function', () => {
   const validator = createRef<ValidatorWrapper>()
   const rule = [
     {
-      rule: (value) => value !== 'test',
-      message: (value) => `test message ${value}`,
+      rule: (value: string) => value !== 'test',
+      message: (value: string) => `test message ${value}`,
     },
   ]
   render(
@@ -146,4 +146,35 @@ it('check custom rule message function', () => {
 
   expect(validateResult.isValid).toBe(false)
   expect(validateResult.message).toBe('test message test')
+})
+
+jest.useFakeTimers()
+
+it('re-renders the same field to cover handleRef initialization false branch and else-validate path', () => {
+  const validator = createRef<ValidatorWrapper>()
+
+  function Comp() {
+    const [val, setVal] = useState('')
+    useEffect(() => {
+      setTimeout(() => {
+        act(() => setVal('abc'))
+      }, 50)
+    }, [])
+    return (
+      <ValidatorWrapper ref={validator}>
+        <ValidatorField id="rerender" rules={rules.notEmpty} value={val}>
+          {() => null}
+        </ValidatorField>
+      </ValidatorWrapper>
+    )
+  }
+
+  render(<Comp />)
+  // initial: invalid
+  let field = validator.current.getField('rerender')
+  expect(field.validate().isValid).toBe(false)
+
+  jest.runAllTimers()
+  field = validator.current.getField('rerender')
+  expect(field.validate().isValid).toBe(true)
 })

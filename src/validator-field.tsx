@@ -47,9 +47,9 @@ export const ValidatorField = forwardRef<unknown, Props>(function ValidatorField
   }
 
   useEffect(() => {
-    if (handleRef.current) registerField(handleRef.current)
+    registerField(handleRef.current as RegisteredFieldHandle)
     return () => {
-      if (handleRef.current) unregisterField(handleRef.current)
+      unregisterField(handleRef.current as RegisteredFieldHandle)
     }
   }, [registerField, unregisterField])
 

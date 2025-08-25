@@ -9,61 +9,61 @@ export type ValidatorRules = ValidatorRule[]
 export const rules = {
   notEmpty: [
     {
-      rule: (value) => value !== '' && value.length > 0,
+      rule: (value: string) => value !== '' && value.length > 0,
       message: 'Value is required',
     },
   ],
 
   bool: [
     {
-      rule: (value) => !!value,
+      rule: (value: string) => !!value,
       message: 'Value is required',
     },
   ],
 
   password: [
     {
-      rule: (value) => value.length > 0,
+      rule: (value: string) => value.length > 0,
       message: 'Password field cannot be empty',
     },
     {
-      rule: (value) => value.length > 5,
+      rule: (value: string) => value.length > 5,
       message: 'Password field can not be less than 6 characters',
     },
   ],
 
   email: [
     {
-      rule: (value) => !!value && value !== '' && value.length !== 0,
+      rule: (value: string) => !!value && value !== '' && value.length !== 0,
       message: 'Email is required',
     },
     {
-      rule: (value) => emailReg.test(String(value).toLowerCase()),
+      rule: (value: string) => emailReg.test(String(value).toLowerCase()),
       message: 'Email is invalid',
     },
   ],
 
-  min: (min) => [
+  min: (min: number) => [
     {
-      rule: (value) => Number.parseFloat(value) > min,
+      rule: (value: string) => Number.parseFloat(value) > min,
       message: `The value must be greater than ${min}`,
     },
   ],
 
-  max: (max) => [
+  max: (max: number) => [
     {
-      rule: (value) => Number.parseFloat(value) < max,
+      rule: (value: string) => Number.parseFloat(value) < max,
       message: `The value must be smaller ${max}`,
     },
   ],
 
-  length: (min, max?) => [
+  length: (min: number, max?: number) => [
     {
-      rule: (value) => String(value).length >= min,
+      rule: (value: string) => String(value).length >= min,
       message: `No less than ${min} symbols`,
     },
     {
-      rule: (value) => (max !== undefined ? String(value).length <= max : true),
+      rule: (value: string) => (max !== undefined ? String(value).length <= max : true),
       message: `No more than ${max} symbols`,
     },
   ],

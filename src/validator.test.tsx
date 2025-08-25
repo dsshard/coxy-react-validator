@@ -28,3 +28,13 @@ it('check normal add and remove fields', () => {
   newFieldSearchPassword = validator.getField('for-remove')
   expect(newFieldSearchPassword === null).toBe(true)
 })
+
+it('removeField does nothing when field is not registered', () => {
+  const validator = new Validator()
+  // create a field-like object that validator doesn't know about
+  // import Field from the module is possible, but we can emulate shape using any
+  // Should not throw and should not alter state
+  // @ts-expect-error.
+  expect(() => validator.removeField({})).not.toThrow()
+  expect(validator.getField('unknown')).toBe(null)
+})

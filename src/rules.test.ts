@@ -56,7 +56,7 @@ it('check rule min', () => {
   result = rules.min(10)[0].rule('')
   expect(result).toBe(false)
 
-  result = rules.min(9)[0].rule('testtesttest')
+  result = rules.min(9)[0].rule('test-test-test')
   expect(result).toBe(false)
 
   result = rules.min(9)[0].rule('11')
@@ -80,7 +80,7 @@ it('check rule max', () => {
   result = rules.max(10)[0].rule('')
   expect(result).toBe(false)
 
-  result = rules.max(9)[0].rule('testtesttest')
+  result = rules.max(9)[0].rule('test-test-test')
   expect(result).toBe(false)
 
   result = rules.max(9)[0].rule('11')
@@ -107,10 +107,10 @@ it('check rule length', () => {
   result = rules.length(1)[0].rule('1')
   expect(result).toBe(true)
 
-  result = rules.length(1, 10)[0].rule('testtesttest')
+  result = rules.length(1, 10)[0].rule('test-test-test')
   expect(result).toBe(true)
 
-  result = rules.length(1, 10)[1].rule('testtesttest')
+  result = rules.length(1, 10)[1].rule('test-test-test')
   expect(result).toBe(false)
 
   result = rules.length(1, 10)[0].rule('lol')
