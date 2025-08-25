@@ -1,75 +1,78 @@
-import { Component, type ReactNode, type RefObject } from 'react'
+import { forwardRef, type ReactNode, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
 
-import { Context } from './context'
+import { Context, type RegisteredFieldHandle } from './context'
 import type { Validity } from './types'
-import { type Field, Validator } from './validator'
+import { Validator } from './validator'
 
 interface ComponentProps {
   children?: ReactNode
   stopAtFirstError?: boolean
-  ref?: RefObject<ValidatorWrapper>
 }
 
-export class ValidatorWrapper extends Component<ComponentProps> {
-  fields = []
-  state = {
-    customErrors: [],
-  }
+export interface ValidatorWrapper {
+  validate: () => Validity
+  getField: (id: string | number) => RegisteredFieldHandle | null
+  registerField: (field: RegisteredFieldHandle) => void
+  unregisterField: (field: RegisteredFieldHandle) => void
+  setCustomError: (customError: Validity) => void
+  clearCustomErrors: () => void
+}
 
-  constructor(props) {
-    super(props)
-    this.registerField = this.registerField.bind(this)
-    this.unregisterField = this.unregisterField.bind(this)
-  }
+export const ValidatorWrapper = forwardRef<ValidatorWrapper, ComponentProps>(function ValidatorWrapper(
+  { children, stopAtFirstError },
+  ref,
+) {
+  const fieldsRef = useRef<RegisteredFieldHandle[]>([])
+  const [customErrors, setCustomErrors] = useState<Validity[]>([])
 
-  componentWillUnmount() {
-    this.fields = []
-  }
-
-  registerField(field) {
-    if (field && !this.fields.includes(field)) {
-      this.fields.push(field)
+  const registerField = useCallback((field: RegisteredFieldHandle) => {
+    if (field && !fieldsRef.current.includes(field)) {
+      fieldsRef.current.push(field)
     }
-  }
+  }, [])
 
-  unregisterField(field) {
-    const index = this.fields.indexOf(field)
-    if (index > -1) this.fields.splice(index, 1)
-  }
+  const unregisterField = useCallback((field: RegisteredFieldHandle) => {
+    const index = fieldsRef.current.indexOf(field)
+    if (index > -1) fieldsRef.current.splice(index, 1)
+  }, [])
 
-  getField(id): Field | null {
-    return this.fields.find((field) => field.props.id === id) || null
-  }
+  const getField = useCallback<ValidatorWrapper['getField']>((id) => {
+    return fieldsRef.current.find((field) => field?.props?.id === id) || null
+  }, [])
 
-  setCustomError(customError: Validity) {
-    this.setState({
-      customErrors: [...this.state.customErrors, customError],
-    })
-  }
+  const setCustomError = useCallback<ValidatorWrapper['setCustomError']>((customError) => {
+    setCustomErrors((prev) => [...prev, customError])
+  }, [])
 
-  clearCustomErrors() {
-    this.setState({ customErrors: [] })
-  }
+  const clearCustomErrors = useCallback<ValidatorWrapper['clearCustomErrors']>(() => {
+    setCustomErrors([])
+  }, [])
 
-  validate(): Validity {
-    const validator = new Validator({ stopAtFirstError: this.props.stopAtFirstError })
-    for (const comp of this.fields) {
+  const validate = useCallback<ValidatorWrapper['validate']>(() => {
+    const validator = new Validator({ stopAtFirstError })
+    for (const comp of fieldsRef.current) {
       validator.addField(comp.props)
     }
     return validator.validate()
-  }
+  }, [stopAtFirstError])
 
-  render(): ReactNode {
-    return (
-      <Context.Provider
-        value={{
-          customErrors: this.state.customErrors,
-          registerField: this.registerField,
-          unregisterField: this.unregisterField,
-        }}
-      >
-        {this.props.children}
-      </Context.Provider>
-    )
-  }
-}
+  useImperativeHandle(
+    ref,
+    () => ({
+      validate,
+      getField,
+      registerField,
+      unregisterField,
+      setCustomError,
+      clearCustomErrors,
+    }),
+    [validate, getField, registerField, unregisterField, setCustomError, clearCustomErrors],
+  )
+
+  const contextValue = useMemo(
+    () => ({ customErrors, registerField, unregisterField }),
+    [customErrors, registerField, unregisterField],
+  )
+
+  return <Context.Provider value={contextValue}>{children}</Context.Provider>
+})

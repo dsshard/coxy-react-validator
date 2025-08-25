@@ -3,9 +3,9 @@ import type { FieldParams, Validity } from './types'
 import type { Value } from './validator-field'
 
 export class Field {
-  private rules: ValidatorRules
-  private required: boolean
-  private value: Value
+  protected rules: ValidatorRules
+  protected required: boolean
+  protected value: Value
   public id: string | number
 
   constructor({ rules, required, value, id }: FieldParams) {

@@ -2,8 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { render, screen } from '@testing-library/react'
-import { act } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { useEffect, useState } from 'react'
 
 import { rules } from './rules'

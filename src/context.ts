@@ -1,9 +1,14 @@
 import { createContext } from 'react'
 
-import type { Validity } from './types'
+import type { FieldParams, Validity } from './types'
+
+export interface RegisteredFieldHandle {
+  props: FieldParams
+  validate: () => Validity
+}
 
 export const Context = createContext<{
-  registerField: (field: string | number) => void
-  unregisterField: (field: string | number) => void
+  registerField: (field: RegisteredFieldHandle) => void
+  unregisterField: (field: RegisteredFieldHandle) => void
   customErrors: Array<Validity>
 }>(null)

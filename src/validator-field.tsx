@@ -1,69 +1,59 @@
-import { Component, type ReactNode } from 'react'
-import type { Validity } from 'types'
+import { forwardRef, type ReactNode, useContext, useEffect, useRef } from 'react'
+import type { FieldParams, Validity } from 'types'
 
-import { Context } from './context'
-import type { ValidatorRules } from './rules'
+import { Context, type RegisteredFieldHandle } from './context'
 import { Field } from './validator'
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+// biome-ignore lint/suspicious/noExplicitAny: <need>
 export type Value = any
 
 type Fn = (validity: Validity, value: Value) => ReactNode
 
-interface Props {
-  rules?: ValidatorRules
-  required?: boolean
-  value?: Value
-  id?: string | number
+type Props = FieldParams & {
   children?: ReactNode | Fn
-  unregisterField: (val: Value) => void
-  registerField: (val: Value) => void
-  customErrors: Array<Validity>
 }
 
-class ValidationFieldWrapper extends Component<Props> {
-  componentWillUnmount() {
-    this.props.unregisterField(this)
-  }
+export const ValidatorField = forwardRef<unknown, Props>(function ValidatorField(props: Props, _ref) {
+  const { children, value } = props
+  const { customErrors, registerField, unregisterField } = useContext(Context)
 
-  componentDidMount() {
-    this.props.registerField(this)
-  }
+  const propsRef = useRef(props)
+  propsRef.current = props
 
-  validate(): Validity {
-    const props = this.props
-    const customError = props.customErrors.find((item) => item.id === props.id)
-    if (customError) {
-      return customError
+  const customErrorsRef = useRef(customErrors)
+  customErrorsRef.current = customErrors
+
+  const handleRef = useRef<RegisteredFieldHandle | null>(null)
+  if (!handleRef.current) {
+    handleRef.current = {
+      get props() {
+        return propsRef.current
+      },
+      validate: () => {
+        const curr = propsRef.current
+        const customError = customErrorsRef.current.find((item) => item.id === curr.id)
+        if (customError) {
+          return customError
+        }
+        const field = new Field({
+          rules: curr.rules,
+          required: curr.required,
+          value: curr.value,
+          id: curr.id,
+        })
+        return field.validate()
+      },
     }
-
-    const field = new Field({
-      rules: props.rules,
-      required: props.required,
-      value: props.value,
-      id: props.id,
-    })
-    return field.validate()
   }
 
-  render() {
-    const { children, value } = this.props
-    const validity = this.validate()
-    return typeof children === 'function' ? children(validity, value) : children
-  }
-}
+  useEffect(() => {
+    if (handleRef.current) registerField(handleRef.current)
+    return () => {
+      if (handleRef.current) unregisterField(handleRef.current)
+    }
+  }, [registerField, unregisterField])
 
-export function ValidatorField(props: Omit<Props, 'registerField' | 'unregisterField' | 'customErrors'>) {
-  return (
-    <Context.Consumer>
-      {(data) => (
-        <ValidationFieldWrapper
-          {...props}
-          customErrors={data.customErrors}
-          registerField={data.registerField}
-          unregisterField={data.unregisterField}
-        />
-      )}
-    </Context.Consumer>
-  )
-}
+  const validity = handleRef.current.validate()
+
+  return typeof children === 'function' ? (children as Fn)(validity, value) : (children as ReactNode)
+})

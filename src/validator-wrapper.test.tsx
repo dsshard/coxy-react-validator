@@ -13,12 +13,12 @@ it('check wrapper validator', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} />
-      <ValidatorField rules={[]} />
-      <ValidatorField rules={[]} />
-      <ValidatorField rules={[]} />
-      <ValidatorField rules={[]} />
-      <ValidatorField rules={[]} />
+      <ValidatorField rules={[]} value="" />
+      <ValidatorField rules={[]} value="" />
+      <ValidatorField rules={[]} value="" />
+      <ValidatorField rules={[]} value="" />
+      <ValidatorField rules={[]} value="" />
+      <ValidatorField rules={[]} value="" />
     </ValidatorWrapper>,
   )
 
@@ -30,8 +30,8 @@ it('check getField validator', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} id="test" />
-      <ValidatorField rules={[]} id="test-fields" />
+      <ValidatorField rules={[]} id="test" value="" />
+      <ValidatorField rules={[]} id="test-fields" value="" />
     </ValidatorWrapper>,
   )
   expect(typeof validator.current.getField).toBe('function')
@@ -48,7 +48,7 @@ it('check getField undefined field', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} id="test-empty-field" />
+      <ValidatorField rules={[]} id="test-empty-field" value="" />
     </ValidatorWrapper>,
   )
 
@@ -75,7 +75,7 @@ it('check unregisterField, registerField', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} id="test-register-field" />
+      <ValidatorField rules={[]} id="test-register-field" value="" />
     </ValidatorWrapper>,
   )
 
@@ -87,9 +87,9 @@ it('check filed in field', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]}>
-        <ValidatorField rules={[]} id="check-validate-field-1" />
-        <ValidatorField rules={[]} id="check-validate-field-2" />
+      <ValidatorField rules={[]} value="">
+        <ValidatorField rules={[]} id="check-validate-field-1" value="" />
+        <ValidatorField rules={[]} id="check-validate-field-2" value="" />
       </ValidatorField>
     </ValidatorWrapper>,
   )

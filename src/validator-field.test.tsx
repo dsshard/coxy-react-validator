@@ -21,7 +21,7 @@ it('check context validator', () => {
   const validator = createRef<ValidatorWrapper>()
   render(
     <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={[]} />
+      <ValidatorField rules={[]} value="" />
     </ValidatorWrapper>,
   )
 

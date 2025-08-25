@@ -1,19 +1,11 @@
-import * as react_jsx_runtime from 'react/jsx-runtime';
-import { ReactNode, Component, RefObject } from 'react';
+import * as react from 'react';
+import { ReactNode } from 'react';
 
 type Value = any;
 type Fn$1 = (validity: Validity, value: Value) => ReactNode;
-interface Props {
-    rules?: ValidatorRules;
-    required?: boolean;
-    value?: Value;
-    id?: string | number;
+declare const ValidatorField: react.ForwardRefExoticComponent<FieldParams & {
     children?: ReactNode | Fn$1;
-    unregisterField: (val: Value) => void;
-    registerField: (val: Value) => void;
-    customErrors: Array<Validity>;
-}
-declare function ValidatorField(props: Omit<Props, 'registerField' | 'unregisterField' | 'customErrors'>): react_jsx_runtime.JSX.Element;
+} & react.RefAttributes<unknown>>;
 
 type Fn = (value: Value) => string;
 interface ValidatorRule {
@@ -69,10 +61,12 @@ declare const rules: {
     }[];
 };
 
+declare function useValidator(value: Value, rules: ValidatorRules): [boolean, Pick<Validity, 'message' | 'errors'>];
+
 declare class Field {
-    private rules;
-    private required;
-    private value;
+    protected rules: ValidatorRules;
+    protected required: boolean;
+    protected value: Value;
     id: string | number;
     constructor({ rules, required, value, id }: FieldParams);
     validate(): Validity;
@@ -90,27 +84,23 @@ declare class Validator {
     validate(): Validity;
 }
 
+interface RegisteredFieldHandle {
+    props: FieldParams;
+    validate: () => Validity;
+}
+
 interface ComponentProps {
     children?: ReactNode;
     stopAtFirstError?: boolean;
-    ref?: RefObject<ValidatorWrapper>;
 }
-declare class ValidatorWrapper extends Component<ComponentProps> {
-    fields: any[];
-    state: {
-        customErrors: any[];
-    };
-    constructor(props: any);
-    componentWillUnmount(): void;
-    registerField(field: any): void;
-    unregisterField(field: any): void;
-    getField(id: any): Field | null;
-    setCustomError(customError: Validity): void;
-    clearCustomErrors(): void;
-    validate(): Validity;
-    render(): ReactNode;
+interface ValidatorWrapper {
+    validate: () => Validity;
+    getField: (id: string | number) => RegisteredFieldHandle | null;
+    registerField: (field: RegisteredFieldHandle) => void;
+    unregisterField: (field: RegisteredFieldHandle) => void;
+    setCustomError: (customError: Validity) => void;
+    clearCustomErrors: () => void;
 }
-
-declare function useValidator(value: Value, rules: ValidatorRules): [boolean, Pick<Validity, 'message' | 'errors'>];
+declare const ValidatorWrapper: react.ForwardRefExoticComponent<ComponentProps & react.RefAttributes<ValidatorWrapper>>;
 
 export { type ErrorMessage, type FieldParams, Validator, ValidatorField, type ValidatorRule, ValidatorWrapper, type Validity, rules, useValidator };
