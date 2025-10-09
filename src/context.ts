@@ -10,5 +10,4 @@ export interface RegisteredFieldHandle {
 export const Context = createContext<{
   registerField: (field: RegisteredFieldHandle) => void
   unregisterField: (field: RegisteredFieldHandle) => void
-  customErrors: Array<Validity>
 }>(null)

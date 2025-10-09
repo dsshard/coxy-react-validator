@@ -24,14 +24,14 @@ jest.useFakeTimers()
 it('check state change and hide field', () => {
   function Comp() {
     const [value, setValue] = useState(false)
-    const [isValid, validateObject] = useValidator(value, rules.bool)
+    const [isValid, validateObject] = useValidator(value, rules.isTrue)
 
     useEffect(() => {
       setTimeout(() => {
         act(() => {
           setValue(true)
         })
-      }, 100)
+      }, 200)
     }, [])
 
     return (
@@ -46,7 +46,7 @@ it('check state change and hide field', () => {
   })
 
   expect(screen.getByTestId('test1').textContent).toContain('false')
-  expect(screen.getByTestId('test2').textContent).toContain('Value is required')
+  expect(screen.getByTestId('test2').textContent).toContain('Invalid input: expected true')
 
   jest.runAllTimers()
 

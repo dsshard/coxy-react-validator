@@ -1,6 +1,7 @@
+// biome-ignore lint/correctness/noUnusedImports: <need>
 import React, { createRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
-import { rules, Validator, ValidatorField, ValidatorWrapper } from '../dist/index'
+import { rules, ValidatorField, ValidatorWrapper } from '../dist/index'
 
 function App() {
   const [email, setEmail] = useState('')
@@ -8,32 +9,6 @@ function App() {
 
   function handleValidateEmail() {
     const { isValid, message, errors } = jsxValidator.current.validate()
-    if (!isValid) {
-      console.log(isValid, message, errors)
-      return
-    }
-    console.log('success')
-  }
-
-  function handleValidateCustomFields() {
-    const validator = new Validator({ stopAtFirstError: true })
-    const fieldPassword = validator.addField({
-      rules: rules.password,
-      value: '',
-      id: 'for-remove',
-    })
-
-    const fieldSearchPassword = validator.getField('for-remove')
-    console.log(fieldPassword === fieldSearchPassword)
-
-    validator.removeField(fieldPassword)
-
-    validator.addField({
-      rules: rules.password,
-      value: 'testpassword',
-    })
-
-    const { isValid, message, errors } = validator.validate()
     if (!isValid) {
       console.log(isValid, message, errors)
       return
@@ -55,9 +30,6 @@ function App() {
           </>
         )}
       </ValidatorField>
-      <button onClick={handleValidateCustomFields} type="button">
-        Validate custom fields
-      </button>
     </ValidatorWrapper>
   )
 }

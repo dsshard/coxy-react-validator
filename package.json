@@ -1,7 +1,7 @@
 {
   "name": "@coxy/react-validator",
-  "version": "4.0.0",
-  "description": "🚀 Simple validation form for React or NodeJS apps. useValidator are included ;)",
+  "version": "5.0.0",
+  "description": "🚀 Simple validation form for React or NodeJS apps with zod. useValidator are included ;)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -22,8 +22,8 @@
   "author": "dsshard",
   "scripts": {
     "start": "tsup ./src/index.ts --watch",
-    "build": "tsup",
-    "lint": "biome lint --fix",
+    "build": "tsup ./src/index.ts",
+    "lint": "npx biome lint --fix",
     "example": "NODE_ENV=production npx esbuild example/example.tsx --bundle --outfile=example/dist/example.js --minify --format=esm --target=es2020",
     "coverage": "npx codecov",
     "coveralls": "npx coveralls .",
@@ -33,11 +33,10 @@
   "peerDependencies": {
     "react": ">=18.x.x"
   },
-  "dependencies": {},
+  "dependencies": {
+    "zod": "^3.25.0 || ^4.0.0"
+  },
   "devDependencies": {
-    "react": ">=18.x.x",
-    "react-dom": ">=18.x.x",
-    "@biomejs/biome": "2.2.2",
     "@testing-library/dom": "10.4.1",
     "@testing-library/react": "16.3.0",
     "@types/jest": "30.0.0",
@@ -46,10 +45,12 @@
     "@types/react-dom": "19.1.7",
     "jest": "30.0.5",
     "jest-environment-jsdom": "30.0.5",
-    "tsup": "8.5.0",
+    "react": ">=18.x.x",
+    "react-dom": ">=18.x.x",
     "react-test-renderer": "19.1.1",
     "ts-jest": "29.4.0",
     "ts-node": "10.9.2",
+    "tsup": "8.5.0",
     "typescript": "5.8.3"
   }
 }

@@ -1,12 +1,6 @@
+import type { ZodSafeParseResult } from 'zod/index'
 import type { ValidatorRules } from './rules'
 import type { Value } from './validator-field'
-
-type Fn = (value: Value) => string
-
-export interface ValidatorRule {
-  rule: (value: Value) => boolean
-  message: string | Fn
-}
 
 export interface ErrorMessage {
   message: string
@@ -16,7 +10,7 @@ export interface ErrorMessage {
 export interface Validity {
   message: string
   isValid: boolean
-  errors?: ErrorMessage[]
+  result: ZodSafeParseResult<unknown>
   id?: string | number
 }
 

@@ -10,7 +10,7 @@ it('check normal create validator', () => {
 it('check normal add and remove fields', () => {
   const validator = new Validator({ stopAtFirstError: true })
   const fieldPassword = validator.addField({
-    rules: rules.password,
+    rules: rules.email,
     value: '',
     id: 'for-remove',
   })

@@ -15,13 +15,10 @@ type Props = FieldParams & {
 
 export const ValidatorField = forwardRef<unknown, Props>(function ValidatorField(props: Props, _ref) {
   const { children, value } = props
-  const { customErrors, registerField, unregisterField } = useContext(Context)
+  const { registerField, unregisterField } = useContext(Context)
 
   const propsRef = useRef(props)
   propsRef.current = props
-
-  const customErrorsRef = useRef(customErrors)
-  customErrorsRef.current = customErrors
 
   const handleRef = useRef<RegisteredFieldHandle | null>(null)
   if (!handleRef.current) {
@@ -31,10 +28,6 @@ export const ValidatorField = forwardRef<unknown, Props>(function ValidatorField
       },
       validate: () => {
         const curr = propsRef.current
-        const customError = customErrorsRef.current.find((item) => item.id === curr.id)
-        if (customError) {
-          return customError
-        }
         const field = new Field({
           rules: curr.rules,
           required: curr.required,

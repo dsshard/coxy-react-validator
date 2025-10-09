@@ -4,7 +4,7 @@
 
 import { render } from '@testing-library/react'
 import { createRef } from 'react'
-
+import type { Validity } from 'types'
 import { rules } from './rules'
 import { ValidatorField } from './validator-field'
 import { ValidatorWrapper } from './validator-wrapper'
@@ -62,13 +62,13 @@ it('check stopAtFirstError validator', () => {
     <ValidatorWrapper ref={validator} stopAtFirstError>
       <ValidatorField rules={[]} value="test" />
       <ValidatorField rules={rules.email} value="test" />
-      <ValidatorField rules={rules.password} value="" />
+      <ValidatorField rules={rules.isTrue} value={false} />
     </ValidatorWrapper>,
   )
+
   const fieldValidate = validator.current.validate()
   expect(fieldValidate.isValid).toBe(false)
   expect(fieldValidate.message).toBe('Email is invalid')
-  expect(fieldValidate.errors.length).toBe(1)
 })
 
 it('check unregisterField, registerField', () => {
@@ -107,7 +107,7 @@ it('check wrapper in wrapper', () => {
     <ValidatorWrapper ref={validatorOut}>
       <ValidatorField rules={rules.email} value="" />
       <ValidatorWrapper ref={validatorIn}>
-        <ValidatorField rules={rules.password} value="successpasswword" />
+        <ValidatorField rules={rules.isTrue} value={true} />
       </ValidatorWrapper>
     </ValidatorWrapper>,
   )
@@ -121,7 +121,7 @@ it('check two validators', () => {
   render(
     <>
       <ValidatorWrapper ref={validatorSuccess}>
-        <ValidatorField rules={rules.password} value="successpasswword" />
+        <ValidatorField rules={rules.notEmpty} value="successpasswword" />
       </ValidatorWrapper>
       <ValidatorWrapper ref={validatorFailed}>
         <ValidatorField rules={rules.email} value="" />
@@ -146,7 +146,7 @@ it('covers registerField duplicate and unregisterField non-existing branches', (
   validator.current.unregisterField(handle)
   const dummy = {
     props: { value: '', rules: [], id: 'dummy' },
-    validate: () => ({ isValid: true, message: '' }),
+    validate: (): Validity => ({ isValid: true, message: '', result: { success: true, data: null } }),
   }
   validator.current.unregisterField(dummy)
 })

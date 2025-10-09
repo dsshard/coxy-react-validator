@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, type ReactNode, useCallback, useImperativeHandle, useMemo, useRef } from 'react'
 
 import { Context, type RegisteredFieldHandle } from './context'
 import type { Validity } from './types'
@@ -14,8 +14,6 @@ export interface ValidatorWrapper {
   getField: (id: string | number) => RegisteredFieldHandle | null
   registerField: (field: RegisteredFieldHandle) => void
   unregisterField: (field: RegisteredFieldHandle) => void
-  setCustomError: (customError: Validity) => void
-  clearCustomErrors: () => void
 }
 
 export const ValidatorWrapper = forwardRef<ValidatorWrapper, ComponentProps>(function ValidatorWrapper(
@@ -23,7 +21,6 @@ export const ValidatorWrapper = forwardRef<ValidatorWrapper, ComponentProps>(fun
   ref,
 ) {
   const fieldsRef = useRef<RegisteredFieldHandle[]>([])
-  const [customErrors, setCustomErrors] = useState<Validity[]>([])
 
   const registerField = useCallback((field: RegisteredFieldHandle) => {
     if (field && !fieldsRef.current.includes(field)) {
@@ -38,14 +35,6 @@ export const ValidatorWrapper = forwardRef<ValidatorWrapper, ComponentProps>(fun
 
   const getField = useCallback<ValidatorWrapper['getField']>((id) => {
     return fieldsRef.current.find((field) => field?.props?.id === id) || null
-  }, [])
-
-  const setCustomError = useCallback<ValidatorWrapper['setCustomError']>((customError) => {
-    setCustomErrors((prev) => [...prev, customError])
-  }, [])
-
-  const clearCustomErrors = useCallback<ValidatorWrapper['clearCustomErrors']>(() => {
-    setCustomErrors([])
   }, [])
 
   const validate = useCallback<ValidatorWrapper['validate']>(() => {
@@ -63,16 +52,11 @@ export const ValidatorWrapper = forwardRef<ValidatorWrapper, ComponentProps>(fun
       getField,
       registerField,
       unregisterField,
-      setCustomError,
-      clearCustomErrors,
     }),
-    [validate, getField, registerField, unregisterField, setCustomError, clearCustomErrors],
+    [validate, getField, registerField, unregisterField],
   )
 
-  const contextValue = useMemo(
-    () => ({ customErrors, registerField, unregisterField }),
-    [customErrors, registerField, unregisterField],
-  )
+  const contextValue = useMemo(() => ({ registerField, unregisterField }), [registerField, unregisterField])
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>
 })

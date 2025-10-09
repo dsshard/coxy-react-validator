@@ -4,7 +4,6 @@
 
 import { act, render } from '@testing-library/react'
 import { createRef, useEffect, useState } from 'react'
-
 import { rules } from './rules'
 import { ValidatorField } from './validator-field'
 import { ValidatorWrapper } from './validator-wrapper'
@@ -51,13 +50,11 @@ it('check failed validation', () => {
 
     expect(validateResult1.isValid).toBe(false)
     expect(validateResult1.message).toBe('Email is invalid')
-    expect(validateResult1.errors.length).toBe(1)
 
     const validateResult2 = validator2.current.validate()
 
     expect(validateResult2.isValid).toBe(false)
     expect(validateResult2.message).toBe('Email is required')
-    expect(validateResult2.errors.length).toBe(1)
   })
 })
 
@@ -93,7 +90,6 @@ it('check state change and hide field', () => {
 
   expect(validateResult1.isValid).toBe(false)
   expect(validateResult1.message).toBe('Email is invalid')
-  expect(validateResult1.errors.length).toBe(1)
 })
 
 it('check success validation', () => {
@@ -124,28 +120,6 @@ it('check success validation fot child function', () => {
 
   expect(validateResult.isValid).toBe(true)
   expect(validateResult.message).toBe('')
-})
-
-it('check custom rule message function', () => {
-  const validator = createRef<ValidatorWrapper>()
-  const rule = [
-    {
-      rule: (value: string) => value !== 'test',
-      message: (value: string) => `test message ${value}`,
-    },
-  ]
-  render(
-    <ValidatorWrapper ref={validator}>
-      <ValidatorField rules={rule} value="test">
-        {({ isValid, message }) => <>{!isValid && <div>{message}</div>}</>}
-      </ValidatorField>
-    </ValidatorWrapper>,
-  )
-
-  const validateResult = validator.current.validate()
-
-  expect(validateResult.isValid).toBe(false)
-  expect(validateResult.message).toBe('test message test')
 })
 
 jest.useFakeTimers()

@@ -1,2 +1,206 @@
-'use strict';var react=require('react'),jsxRuntime=require('react/jsx-runtime');var h=/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,x={notEmpty:[{rule:r=>r!==""&&r.length>0,message:"Value is required"}],bool:[{rule:r=>!!r,message:"Value is required"}],password:[{rule:r=>r.length>0,message:"Password field cannot be empty"},{rule:r=>r.length>5,message:"Password field can not be less than 6 characters"}],email:[{rule:r=>!!r&&r!==""&&r.length!==0,message:"Email is required"},{rule:r=>h.test(String(r).toLowerCase()),message:"Email is invalid"}],min:r=>[{rule:e=>Number.parseFloat(e)>r,message:`The value must be greater than ${r}`}],max:r=>[{rule:e=>Number.parseFloat(e)<r,message:`The value must be smaller ${r}`}],length:(r,e)=>[{rule:t=>String(t).length>=r,message:`No less than ${r} symbols`},{rule:t=>e!==void 0?String(t).length<=e:true,message:`No more than ${e} symbols`}]};var V=class{rules;required;value;id;constructor({rules:e,required:t,value:s,id:i}){this.rules=e,this.required=t,this.value=s,this.id=i;}validate(){let e=true,t="",{rules:s,value:i,required:d,id:u}=this,n=!i&&Number.parseFloat(i)!==0;if(!s.length||n&&d===false)return {isValid:e,message:t,id:u};for(let a of s)e&&(e=a.rule(i),e||(typeof a.message=="function"?t=a.message(i):t=a.message));return {isValid:e,message:t,id:u}}},c=class{fields;params;constructor(e){this.params=e||null,this.fields=[];}addField(e){let t=new V(e);return this.fields.push(t),t}removeField(e){let t=this.fields.indexOf(e);t>-1&&this.fields.splice(t,1);}getField(e){return this.fields.find(t=>t.id===e)||null}validate(){let e,s=this.fields.map(i=>this.params?.stopAtFirstError&&e&&e.isValid===false?null:(e=i.validate(),e)).filter(i=>i&&i.isValid===false);if(s.length){let{isValid:i,message:d}=s[0];return {isValid:i,message:d,errors:s}}return {isValid:true,message:""}}};function b(r,e){let t=new c;t.addField({value:r,rules:e});let{isValid:s,...i}=t.validate();return [s,i]}var v=react.createContext(null);var w=react.forwardRef(function(e,t){let{children:s,value:i}=e,{customErrors:d,registerField:u,unregisterField:n}=react.useContext(v),a=react.useRef(e);a.current=e;let g=react.useRef(d);g.current=d;let p=react.useRef(null);p.current||(p.current={get props(){return a.current},validate:()=>{let m=a.current,y=g.current.find(o=>o.id===m.id);return y||new V({rules:m.rules,required:m.required,value:m.value,id:m.id}).validate()}}),react.useEffect(()=>(u(p.current),()=>{n(p.current);}),[u,n]);let F=p.current.validate();return typeof s=="function"?s(F,i):s});var S=react.forwardRef(function({children:e,stopAtFirstError:t},s){let i=react.useRef([]),[d,u]=react.useState([]),n=react.useCallback(l=>{l&&!i.current.includes(l)&&i.current.push(l);},[]),a=react.useCallback(l=>{let o=i.current.indexOf(l);o>-1&&i.current.splice(o,1);},[]),g=react.useCallback(l=>i.current.find(o=>o?.props?.id===l)||null,[]),p=react.useCallback(l=>{u(o=>[...o,l]);},[]),F=react.useCallback(()=>{u([]);},[]),m=react.useCallback(()=>{let l=new c({stopAtFirstError:t});for(let o of i.current)l.addField(o.props);return l.validate()},[t]);react.useImperativeHandle(s,()=>({validate:m,getField:g,registerField:n,unregisterField:a,setCustomError:p,clearCustomErrors:F}),[m,g,n,a,p,F]);let y=react.useMemo(()=>({customErrors:d,registerField:n,unregisterField:a}),[d,n,a]);return jsxRuntime.jsx(v.Provider,{value:y,children:e})});exports.Validator=c;exports.ValidatorField=w;exports.ValidatorWrapper=S;exports.rules=x;exports.useValidator=b;//# sourceMappingURL=index.js.map
-//# sourceMappingURL=index.js.map
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/index.ts
+var index_exports = {};
+__export(index_exports, {
+  Validator: () => Validator,
+  ValidatorField: () => ValidatorField,
+  ValidatorWrapper: () => ValidatorWrapper,
+  rules: () => rules,
+  useValidator: () => useValidator
+});
+module.exports = __toCommonJS(index_exports);
+
+// src/rules.ts
+var import_zod = require("zod");
+var rules = {
+  notEmpty: [import_zod.z.string().min(1, { error: "Field is required" })],
+  isTrue: [import_zod.z.boolean({ error: "Value is required" }).and(import_zod.z.literal(true))],
+  email: [import_zod.z.string().min(1, { error: "Email is required" }), import_zod.z.email({ message: "Email is invalid" })]
+};
+
+// src/validator.ts
+var Field = class {
+  rules;
+  required;
+  value;
+  id;
+  constructor({ rules: rules2, required, value, id }) {
+    this.rules = rules2;
+    this.required = required;
+    this.value = value;
+    this.id = id;
+  }
+  validate() {
+    let isValid = true;
+    let message = "";
+    const { value, required, id } = this;
+    let result = { success: true, data: value };
+    const isEmptyValue = !value && Number.parseFloat(value) !== 0;
+    const rules2 = Array.isArray(this.rules) ? this.rules : [this.rules];
+    if (!rules2.length || isEmptyValue && required === false) {
+      return {
+        isValid,
+        message,
+        id,
+        result: { success: true, data: value }
+      };
+    }
+    for (const ruleItem of rules2) {
+      if (isValid && ruleItem && "safeParse" in ruleItem) {
+        result = ruleItem.safeParse(value);
+        isValid = result.success;
+        if (!isValid && result.error) {
+          message = result.error.issues[0]?.message || "Validation error";
+        }
+      }
+    }
+    return { isValid, message, id, result };
+  }
+};
+var Validator = class {
+  fields;
+  params;
+  constructor(params) {
+    this.params = params || null;
+    this.fields = [];
+  }
+  addField(params) {
+    const field = new Field(params);
+    this.fields.push(field);
+    return field;
+  }
+  removeField(field) {
+    const index = this.fields.indexOf(field);
+    if (index > -1) this.fields.splice(index, 1);
+  }
+  getField(id) {
+    return this.fields.find((field) => field.id === id) || null;
+  }
+  validate() {
+    let prevResult;
+    const statuses = this.fields.map((field) => {
+      if (this.params?.stopAtFirstError && prevResult && prevResult.isValid === false) {
+        return null;
+      }
+      prevResult = field.validate();
+      return prevResult;
+    });
+    const results = statuses.filter((inst) => inst && inst.isValid === false);
+    if (results.length) {
+      return results[0];
+    }
+    return { isValid: true, message: "", result: results[0]?.result };
+  }
+};
+
+// src/use-validator.ts
+function useValidator(value, rules2) {
+  const validator = new Validator();
+  validator.addField({ value, rules: rules2 });
+  const { isValid, ...validateObject } = validator.validate();
+  return [isValid, validateObject];
+}
+
+// src/validator-field.tsx
+var import_react2 = require("react");
+
+// src/context.ts
+var import_react = require("react");
+var Context = (0, import_react.createContext)(null);
+
+// src/validator-field.tsx
+var ValidatorField = (0, import_react2.forwardRef)(function ValidatorField2(props, _ref) {
+  const { children, value } = props;
+  const { registerField, unregisterField } = (0, import_react2.useContext)(Context);
+  const propsRef = (0, import_react2.useRef)(props);
+  propsRef.current = props;
+  const handleRef = (0, import_react2.useRef)(null);
+  if (!handleRef.current) {
+    handleRef.current = {
+      get props() {
+        return propsRef.current;
+      },
+      validate: () => {
+        const curr = propsRef.current;
+        const field = new Field({
+          rules: curr.rules,
+          required: curr.required,
+          value: curr.value,
+          id: curr.id
+        });
+        return field.validate();
+      }
+    };
+  }
+  (0, import_react2.useEffect)(() => {
+    registerField(handleRef.current);
+    return () => {
+      unregisterField(handleRef.current);
+    };
+  }, [registerField, unregisterField]);
+  const validity = handleRef.current.validate();
+  return typeof children === "function" ? children(validity, value) : children;
+});
+
+// src/validator-wrapper.tsx
+var import_react3 = require("react");
+var import_jsx_runtime = require("react/jsx-runtime");
+var ValidatorWrapper = (0, import_react3.forwardRef)(function ValidatorWrapper2({ children, stopAtFirstError }, ref) {
+  const fieldsRef = (0, import_react3.useRef)([]);
+  const registerField = (0, import_react3.useCallback)((field) => {
+    if (field && !fieldsRef.current.includes(field)) {
+      fieldsRef.current.push(field);
+    }
+  }, []);
+  const unregisterField = (0, import_react3.useCallback)((field) => {
+    const index = fieldsRef.current.indexOf(field);
+    if (index > -1) fieldsRef.current.splice(index, 1);
+  }, []);
+  const getField = (0, import_react3.useCallback)((id) => {
+    return fieldsRef.current.find((field) => field?.props?.id === id) || null;
+  }, []);
+  const validate = (0, import_react3.useCallback)(() => {
+    const validator = new Validator({ stopAtFirstError });
+    for (const comp of fieldsRef.current) {
+      validator.addField(comp.props);
+    }
+    return validator.validate();
+  }, [stopAtFirstError]);
+  (0, import_react3.useImperativeHandle)(
+    ref,
+    () => ({
+      validate,
+      getField,
+      registerField,
+      unregisterField
+    }),
+    [validate, getField, registerField, unregisterField]
+  );
+  const contextValue = (0, import_react3.useMemo)(() => ({ registerField, unregisterField }), [registerField, unregisterField]);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Context.Provider, { value: contextValue, children });
+});
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  Validator,
+  ValidatorField,
+  ValidatorWrapper,
+  rules,
+  useValidator
+});

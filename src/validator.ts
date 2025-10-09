@@ -1,3 +1,4 @@
+import type { ZodSafeParseResult } from 'zod'
 import type { ValidatorRules } from './rules'
 import type { FieldParams, Validity } from './types'
 import type { Value } from './validator-field'
@@ -18,26 +19,31 @@ export class Field {
   validate(): Validity {
     let isValid = true
     let message = ''
-    const { rules, value, required, id } = this
+    const { value, required, id } = this
+    let result: ZodSafeParseResult<unknown> = { success: true, data: value }
 
     const isEmptyValue = !value && Number.parseFloat(value) !== 0
+    const rules = Array.isArray(this.rules) ? this.rules : [this.rules]
 
     if (!rules.length || (isEmptyValue && required === false)) {
-      return { isValid, message, id }
+      return {
+        isValid,
+        message,
+        id,
+        result: { success: true, data: value },
+      }
     }
-    for (const instance of rules) {
-      if (isValid) {
-        isValid = instance.rule(value)
-        if (!isValid) {
-          if (typeof instance.message === 'function') {
-            message = instance.message(value)
-          } else {
-            message = instance.message
-          }
+    for (const ruleItem of rules) {
+      if (isValid && ruleItem && 'safeParse' in ruleItem) {
+        // Handle Zod schemas
+        result = ruleItem.safeParse(value)
+        isValid = result.success
+        if (!isValid && result.error) {
+          message = result.error.issues[0]?.message || 'Validation error'
         }
       }
     }
-    return { isValid, message, id }
+    return { isValid, message, id, result }
   }
 }
 
@@ -79,12 +85,11 @@ export class Validator {
       return prevResult
     })
 
-    const errors = statuses.filter((inst) => inst && inst.isValid === false)
+    const results = statuses.filter((inst) => inst && inst.isValid === false)
 
-    if (errors.length) {
-      const { isValid, message } = errors[0]
-      return { isValid, message, errors }
+    if (results.length) {
+      return results[0]
     }
-    return { isValid: true, message: '' }
+    return { isValid: true, message: '', result: results[0]?.result }
   }
 }
