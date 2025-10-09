@@ -71,41 +71,17 @@ Create your own rules easily, or use the built-in ones:
 
 ```javascript
 const rules = {
-  email: [
-    { rule: value => value.trim() !== '', message: 'Value is required' },
-    { rule: value => value.includes('@'), message: '@ is required' },
-  ],
-  password: [
-    { rule: value => value.length >= 6, message: 'Password must be at least 6 characters' },
-  ],
-  notEmpty: [
-    { rule: value => !!value && value.trim() !== '', message: 'Field cannot be empty' },
-  ],
-  boolean: [
-    { rule: value => typeof value === 'boolean', message: 'Must be a boolean value' },
-  ],
-  min: (min) => ([
-    { rule: value => Number(value) >= min, message: `Must be at least ${min}` },
-  ]),
-  max: (max) => ([
-    { rule: value => Number(value) <= max, message: `Must be at most ${max}` },
-  ]),
-  length: (min, max) => ([
-    { rule: value => value.length >= min, message: `Must be at least ${min} characters` },
-    ...(max ? [{ rule: value => value.length <= max, message: `Must be at most ${max} characters` }] : [])
-  ]),
-};
+  notEmpty: [z.string().min(1, { error: 'Field is required' })],
+  isTrue: [z.boolean({ error: 'Value is required' }).and(z.literal(true))],
+  email: [z.string().min(1, { error: 'Email is required' }), z.email({ message: 'Email is invalid' })],
+}
 ```
 
-| Name        | Type     | Description                                               |
-|-------------|----------|-----------------------------------------------------------|
-| email       | Array    | Validate non-empty email with regex check.                |
-| password    | Array    | Validate non-empty password with min length.              |
-| notEmpty    | Array    | Check if a string is not empty.                           |
-| boolean     | Array    | Ensure a boolean value is present.                        |
-| min(n)      | Function | Validate number is >= `n`.                                |
-| max(n)      | Function | Validate number is <= `n`.                                |
-| length(a,b) | Function | Validate string length is between `a` and `b` (optional). |
+| Name     | Type  | Description                                |
+|----------|-------|--------------------------------------------|
+| email    | Array | Validate non-empty email with regex check. |
+| notEmpty | Array | Check if a string is not empty.            |
+| isTrue   | Array | Ensure a boolean value is present.         |
 
 ---
 
@@ -160,7 +136,7 @@ Use it server-side or in custom flows.
 const validator = new Validator({ stopAtFirstError: true });
 
 const field = validator.addField({
-  rules: rules.password,
+  rules: rules.email,
   value: '12345',
 });
 ```
@@ -200,8 +176,8 @@ validator.addField({
 
 validator.addField({
   id: 'password',
-  rules: rules.password,
-  value: '1234567',
+  rules: rules.isTrue,
+  value: true,
 });
 
 const result = validator.validate();
