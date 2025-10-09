@@ -1,6 +1,6 @@
 {
   "name": "@coxy/react-validator",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "🚀 Simple validation form for React or NodeJS apps with zod. useValidator are included ;)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
