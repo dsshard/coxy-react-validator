@@ -21,8 +21,8 @@
   ],
   "author": "dsshard",
   "scripts": {
-    "start": "tsup ./src/index.ts --watch",
-    "build": "tsup ./src/index.ts",
+    "start": "tsup ./src/index.ts --watch --dts",
+    "build": "tsup ./src/index.ts --dts",
     "lint": "npx biome lint --fix",
     "example": "NODE_ENV=production npx esbuild example/example.tsx --bundle --outfile=example/dist/example.js --minify --format=esm --target=es2020",
     "coverage": "npx codecov",
